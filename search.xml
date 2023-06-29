@@ -3,7 +3,9 @@
   <entry>
     <title>NiagaraDataInterface笔记一：如何写一个NDI</title>
     <url>/2023/06/29/NiagaraDataInterface%E7%AC%94%E8%AE%B0%E4%B8%80/</url>
-    <content><![CDATA[<p>111</p>
+    <content><![CDATA[<p>NDI简介：<br>    Niagara是虚幻引擎推出的新的粒子系统<br>    NiagaraDataInterface就像Component之于Actor一样，能够通过用户自己的实现给Niagara提供许多功能</p>
+<span id="more"></span>
+<img data-src="/2023/06/29/NiagaraDataInterface%E7%AC%94%E8%AE%B0%E4%B8%80/NDI%E4%B8%80_%E5%9B%BE%E7%89%871.png" class="" title="UE自带很多NDI提供多种功能给粒子系统使用">
 ]]></content>
       <categories>
         <category>游戏知识笔记</category>
