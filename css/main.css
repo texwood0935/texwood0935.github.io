@@ -1449,20 +1449,6 @@ pre code {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.post-toc .nav .nav-child {
-  --height: 0;
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition-property: height, opacity, visibility;
-  transition: 0.2s ease-in-out;
-  visibility: hidden;
-}
-.post-toc .nav .active > .nav-child {
-  height: var(--height, auto);
-  opacity: 1;
-  visibility: unset;
-}
 .post-toc .nav .active > a {
   border-bottom-color: #fc6423;
   color: #fc6423;
@@ -2439,7 +2425,7 @@ header.header {
 .main-inner {
   border-radius: initial;
   box-sizing: border-box;
-  width: calc(100% - 252px);
+  width: calc(100% - 342px);
 }
 @media (max-width: 991px) {
   .main-inner {
@@ -2448,7 +2434,7 @@ header.header {
   }
 }
 .footer-inner {
-  padding-left: 252px;
+  padding-left: 342px;
 }
 @media (max-width: 991px) {
   .footer-inner {
@@ -2458,7 +2444,7 @@ header.header {
   }
 }
 .column {
-  width: 240px;
+  width: 330px;
 }
 @media (max-width: 991px) {
   .column {

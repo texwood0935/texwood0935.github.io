@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"texwood0935.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","width":330,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是我学习如何添加一个MeshPass的笔记。以如何通过MeshPass来渲染出一张特定物体的蒙版为例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚幻引擎如何添加一个MeshPass">
+<meta property="og:url" content="https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Texwood0935&#39;s Blog">
+<meta property="og:description" content="本文是我学习如何添加一个MeshPass的笔记。以如何通过MeshPass来渲染出一张特定物体的蒙版为例。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%B7%BB%E5%8A%A0MeshPass_%E5%9B%BE%E7%89%871.png">
+<meta property="article:published_time" content="2023-07-16T08:04:08.000Z">
+<meta property="article:modified_time" content="2023-07-16T08:05:57.550Z">
+<meta property="article:author" content="Texwood0935">
+<meta property="article:tag" content="UnrealEngine学习">
+<meta property="article:tag" content="渲染相关">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%B7%BB%E5%8A%A0MeshPass_%E5%9B%BE%E7%89%871.png">
+
+
+<link rel="canonical" href="https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/","path":"2023/07/16/虚幻引擎如何添加一个MeshPass的学习笔记/","title":"虚幻引擎如何添加一个MeshPass"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>虚幻引擎如何添加一个MeshPass | Texwood0935's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Texwood0935's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Σ(･ω･ﾉ)ﾉ</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-技术学习"><a href="/categories/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" rel="section"><i class="fa fa-calendar fa-fw"></i>技术学习</a></li><li class="menu-item menu-item-生活"><a href="/categories/%E7%94%9F%E6%B4%BB/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>生活</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%EF%BC%8C%E6%88%91%E4%BB%AC%E5%85%88%E6%B3%A8%E5%86%8C%E6%88%91%E4%BB%AC%E7%9A%84MeshPass%E4%BB%A5%E5%8F%8AMeshProcessor"><span class="nav-number">1.</span> <span class="nav-text">首先，我们先注册我们的MeshPass以及MeshProcessor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%EF%BC%8C%E8%AE%A9%E6%A0%87%E8%AE%B0%E4%BA%86%E7%89%B9%E5%AE%9ATag%E7%9A%84%E7%89%A9%E4%BD%93%E6%B8%B2%E6%9F%93%E6%88%90%E4%B8%80%E5%BC%A0%E7%89%B9%E5%AE%9A%E7%9A%84%E8%92%99%E7%89%88"><span class="nav-number">2.</span> <span class="nav-text">然后，让标记了特定Tag的物体渲染成一张特定的蒙版</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Texwood0935"
+      src="/images/miki.jpg">
+  <p class="site-author-name" itemprop="name">Texwood0935</p>
+  <div class="site-description" itemprop="description">刚出新手村的1级普通村民, 欢迎各位大佬带带喵~ (=ˆ･ω･ˆ=)</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/texwood0935" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;texwood0935" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liu_texwood5082@foxmail.com" title="E-Mail → mailto:liu_texwood5082@foxmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/texwood" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;texwood" rel="noopener me" target="_blank"><i class="fab fa-snapchat fa-fw"></i>知乎</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+      <div id="music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=290 height=370 src="//music.163.com/outchain/player?type=0&id=8534702117&auto=1&height=430"></iframe>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://texwood0935.github.io/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/miki.jpg">
+      <meta itemprop="name" content="Texwood0935">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Texwood0935's Blog">
+      <meta itemprop="description" content="刚出新手村的1级普通村民, 欢迎各位大佬带带喵~ (=ˆ･ω･ˆ=)">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="虚幻引擎如何添加一个MeshPass | Texwood0935's Blog">
+      <meta itemprop="description" content="本文是我学习如何添加一个MeshPass的笔记。以如何通过MeshPass来渲染出一张特定物体的蒙版为例。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          虚幻引擎如何添加一个MeshPass
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-07-16 16:04:08 / 修改时间：16:05:57" itemprop="dateCreated datePublished" datetime="2023-07-16T16:04:08+08:00">2023-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">技术学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E6%B8%B8%E6%88%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">游戏知识笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">本文是我学习如何添加一个MeshPass的笔记。以如何通过MeshPass来渲染出一张特定物体的蒙版为例。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这一章中，我希望通过添加一个MeshPass的形式把标记了特定Tag的物体渲染成一张特定的RT作为蒙版。虽然CustomDepth之类的功能也能方便地做到这一点，但这里主要是想通过这个来学习如何添加一个MeshPass<br>这里参考了<code>EMeshPass::EditorLevelInstance</code>的实现。</p>
+<hr>
+<h3 id="首先，我们先注册我们的MeshPass以及MeshProcessor"><a href="#首先，我们先注册我们的MeshPass以及MeshProcessor" class="headerlink" title="首先，我们先注册我们的MeshPass以及MeshProcessor"></a>首先，我们先注册我们的MeshPass以及MeshProcessor</h3><p>在MeshPass的相关的内容里把我们的MeshPass加上</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> EMeshPass  </span><br><span class="line">&#123;  </span><br><span class="line">   <span class="keyword">enum</span> <span class="title class_">Type</span> : uint8  </span><br><span class="line">   &#123;  </span><br><span class="line">     ...</span><br><span class="line">  </span><br><span class="line"><span class="meta">#<span class="keyword">if</span> WITH_EDITOR  </span></span><br><span class="line">      HitProxy,  </span><br><span class="line">      HitProxyOpaqueOnly,  </span><br><span class="line">      EditorLevelInstance,  </span><br><span class="line">      EditorSelection,  </span><br><span class="line">      <span class="comment">//Texwood Begin Add, For Add A MeshPass  </span></span><br><span class="line">      SpecialTagElement,  </span><br><span class="line">      <span class="comment">//Texwood End Add, For Add A MeshPass  </span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  </span></span><br><span class="line">      Num,  </span><br><span class="line">      NumBits = <span class="number">6</span>,  </span><br><span class="line">   &#125;;&#125;  </span><br><span class="line">  ...</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">const</span> TCHAR* <span class="title">GetMeshPassName</span><span class="params">(EMeshPass::Type MeshPass)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">   <span class="keyword">switch</span> (MeshPass)  </span><br><span class="line">   &#123;   ...</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> WITH_EDITOR  </span></span><br><span class="line">   <span class="keyword">case</span> EMeshPass::HitProxy: <span class="keyword">return</span> <span class="built_in">TEXT</span>(<span class="string">&quot;HitProxy&quot;</span>);  </span><br><span class="line">   <span class="keyword">case</span> EMeshPass::HitProxyOpaqueOnly: <span class="keyword">return</span> <span class="built_in">TEXT</span>(<span class="string">&quot;HitProxyOpaqueOnly&quot;</span>);  </span><br><span class="line">   <span class="keyword">case</span> EMeshPass::EditorLevelInstance: <span class="keyword">return</span> <span class="built_in">TEXT</span>(<span class="string">&quot;EditorLevelInstance&quot;</span>);  </span><br><span class="line">   <span class="keyword">case</span> EMeshPass::EditorSelection: <span class="keyword">return</span> <span class="built_in">TEXT</span>(<span class="string">&quot;EditorSelection&quot;</span>);  </span><br><span class="line">   <span class="comment">//Texwood Begin Add, For Add A MeshPass  </span></span><br><span class="line">   <span class="keyword">case</span> EMeshPass::SpecialTagElement: <span class="keyword">return</span> <span class="built_in">TEXT</span>(<span class="string">&quot;SpecialTagElement&quot;</span>);  </span><br><span class="line">   <span class="comment">//Texwood End Add, For Add A MeshPass  </span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  </span></span><br><span class="line">   &#125;  </span><br><span class="line">  </span><br><span class="line"><span class="meta">#<span class="keyword">if</span> WITH_EDITOR  </span></span><br><span class="line">   <span class="comment">//Texwood Begin Add, For Add A MeshPass  </span></span><br><span class="line">   <span class="comment">//static_assert(EMeshPass::Num == 29 + 4, &quot;Need to update switch(MeshPass) after changing EMeshPass&quot;); // GUID to prevent incorrect auto-resolves, please change when changing the expression: &#123;A6E82589-44B3-4DAD-AC57-8AF6BD50DF43&#125;   </span></span><br><span class="line">   <span class="comment">//这里的数量记得要一起改</span></span><br><span class="line">   <span class="built_in">static_assert</span>(EMeshPass::Num == <span class="number">30</span> + <span class="number">4</span>, <span class="string">&quot;Need to update switch(MeshPass) after changing EMeshPass&quot;</span>); <span class="comment">// GUID to prevent incorrect auto-resolves, please change when changing the expression: &#123;A6E82589-44B3-4DAD-AC57-8AF6BD50DF43&#125;  </span></span><br><span class="line">   <span class="comment">//Texwood End Add, For Add A MeshPass</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span>  </span></span><br><span class="line">   <span class="built_in">static_assert</span>(EMeshPass::Num == <span class="number">29</span>, <span class="string">&quot;Need to update switch(MeshPass) after changing EMeshPass&quot;</span>); <span class="comment">// GUID to prevent incorrect auto-resolves, please change when changing the expression: &#123;A6E82589-44B3-4DAD-AC57-8AF6BD50DF43&#125;  </span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  </span></span><br><span class="line">  </span><br><span class="line">   <span class="built_in">checkf</span>(<span class="number">0</span>, <span class="built_in">TEXT</span>(<span class="string">&quot;Missing case for EMeshPass %u&quot;</span>), (uint32)MeshPass);  </span><br><span class="line">   <span class="keyword">return</span> <span class="literal">nullptr</span>;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ENGINE_API</span> FPSOCollectorCreateManager  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line"><span class="comment">//Texwood0935 Begin Add ,For Add A Mesh Pass  </span></span><br><span class="line">   <span class="comment">//constexpr static uint32 MaxPSOCollectorCount = 33;  </span></span><br><span class="line">   <span class="comment">//这里也别忘了+1 </span></span><br><span class="line">   <span class="keyword">constexpr</span> <span class="type">static</span> uint32 MaxPSOCollectorCount = <span class="number">34</span>;  </span><br><span class="line"><span class="comment">//Texwood0935 Begin Add ,For Add A Mesh Pass  </span></span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>然后仿照<code>FEditorLevelInstanceMeshProcessor</code>写一个MeshProcessor</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Texwood0935 Begin Add, For Add A MeshPass  </span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FSpecialTagElementMeshProcessor</span> : <span class="keyword">public</span> FSceneRenderingAllocatorObject&lt;FSpecialTagElementMeshProcessor&gt;, <span class="keyword">public</span> FMeshPassProcessor  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">  </span><br><span class="line">   <span class="built_in">FSpecialTagElementMeshProcessor</span>(<span class="type">const</span> FScene* Scene, <span class="type">const</span> FSceneView* InViewIfDynamicMeshCommand, FMeshPassDrawListContext* InDrawListContext);  </span><br><span class="line">  </span><br><span class="line">   <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">AddMeshBatch</span><span class="params">(<span class="type">const</span> FMeshBatch&amp; RESTRICT MeshBatch, uint64 BatchElementMask, <span class="type">const</span> FPrimitiveSceneProxy* RESTRICT PrimitiveSceneProxy, int32 StaticMeshId = <span class="number">-1</span>)</span> <span class="keyword">override</span> <span class="keyword">final</span></span>;  </span><br><span class="line">  </span><br><span class="line">   FMeshPassProcessorRenderState PassDrawRenderState;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">private</span>:  </span><br><span class="line">   <span class="function"><span class="type">bool</span> <span class="title">TryAddMeshBatch</span><span class="params">(<span class="type">const</span> FMeshBatch&amp; RESTRICT MeshBatch, uint64 BatchElementMask, <span class="type">const</span> FPrimitiveSceneProxy* RESTRICT PrimitiveSceneProxy, int32 StaticMeshId, <span class="type">const</span> FMaterialRenderProxy* MaterialRenderProxy, <span class="type">const</span> FMaterial* Material)</span></span>;  </span><br><span class="line">  </span><br><span class="line">   <span class="function"><span class="type">bool</span> <span class="title">Process</span><span class="params">(  </span></span></span><br><span class="line"><span class="params"><span class="function">      <span class="type">const</span> FMeshBatch&amp; MeshBatch,  </span></span></span><br><span class="line"><span class="params"><span class="function">      uint64 BatchElementMask,  </span></span></span><br><span class="line"><span class="params"><span class="function">      int32 StaticMeshId,  </span></span></span><br><span class="line"><span class="params"><span class="function">      <span class="type">const</span> FPrimitiveSceneProxy* RESTRICT PrimitiveSceneProxy,  </span></span></span><br><span class="line"><span class="params"><span class="function">      <span class="type">const</span> FMaterialRenderProxy&amp; RESTRICT MaterialRenderProxy,  </span></span></span><br><span class="line"><span class="params"><span class="function">      <span class="type">const</span> FMaterial&amp; RESTRICT MaterialResource,  </span></span></span><br><span class="line"><span class="params"><span class="function">      ERasterizerFillMode MeshFillMode,  </span></span></span><br><span class="line"><span class="params"><span class="function">      ERasterizerCullMode MeshCullMode)</span></span>;  </span><br><span class="line">  </span><br><span class="line">   <span class="function">int32 <span class="title">GetStencilValue</span><span class="params">(<span class="type">const</span> FSceneView* View, <span class="type">const</span> FPrimitiveSceneProxy* PrimitiveSceneProxy)</span></span>;  </span><br><span class="line">&#125;;  </span><br><span class="line"><span class="comment">//Texwood0935 End Add, For Add A MeshPass</span></span><br></pre></td></tr></table></figure>
+<p>大部分内容直接copy<code>FEditorLevelInstanceMeshProcessor</code>的实现就行了，注意我们不需要判断物体是否是LevelInstance以及我们的stencil值不同(<strong>这里我们先暂时都返回1</strong>)。<br>流程重点就是我们通过MeshPassProcessor的AddMeshBatch接口传来的MeshBatch以及其他信息，构建一个我们想要的MeshDrawCommands。<br>（直接用<code>FEditorLevelInstanceMeshProcessor</code>实现的好处就是shader啥的都不用我们自己写了，简而言之就是偷个懒×）<br>参考<code>FEditorLevelInstanceMeshProcessor</code>的实现时，我们还会发现一行很重要的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FRegisterPassProcessorCreateFunction <span class="title">RegisterEditorLevelInstancePass</span><span class="params">(&amp;CreateEditorLevelInstancePassProcessor, EShadingPath::Deferred, EMeshPass::EditorLevelInstance, EMeshPassFlags::MainView)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这个代码声明了一个全局变量，这个全局变量被声明的时候，通过构造函数把MeshPass和相应的MeshPassProcessor绑定到一起(一点吐槽：看UE代码的时候发现，UE还挺喜欢像这样在构造函数里面搞点东西)</p>
+<hr>
+<h3 id="然后，让标记了特定Tag的物体渲染成一张特定的蒙版"><a href="#然后，让标记了特定Tag的物体渲染成一张特定的蒙版" class="headerlink" title="然后，让标记了特定Tag的物体渲染成一张特定的蒙版"></a>然后，让标记了特定Tag的物体渲染成一张特定的蒙版</h3><p>在不修改任何东西的前提下，到我们的MeshPassProcessor的AddMeshBatch是无法知道对应物体的Tag的，因此我们首先把Tag的值传进来，我们可以通过PrimitiveSceneProxy来完成这个目的。<br>在PrimitiveSceneProxy增加一个变量，并且在构造PrimitiveSceneProxy的时候把Component的Tags赋值给那个变量。<br>然后在<code>FSpecialTagElementMeshProcessor::GetStencilValue</code>中把有特殊Tag的物体的stencil值设置为1。</p>
+<p>做完上述工作之后，让标记了特定Tag的物体渲染成一张特定的蒙版的任务还差一步：把Pass加到我们的渲染流程里。<br>我们把这个Pass加到后处理Pass里。同样仿照添加<code>EMeshPass::EditorLevelInstance</code>的<code>AddVisualizeLevelInstancePass</code>。<br>在两者流程基本相同，这里暂时不考虑nanite物体(nanite物体因为和普通物体的渲染流程不同，要做额外处理)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Texwood0935 Begin Add, For Add A MeshPass  </span></span><br><span class="line"><span class="built_in">BEGIN_SHADER_PARAMETER_STRUCT</span>(FVisualizeSpecialTagElementPassParameters, )  </span><br><span class="line">   <span class="built_in">SHADER_PARAMETER_STRUCT_INCLUDE</span>(FSceneTextureShaderParameters, SceneTextures)  </span><br><span class="line">   <span class="built_in">SHADER_PARAMETER_STRUCT_INCLUDE</span>(FInstanceCullingDrawParams, InstanceCullingDrawParams)  </span><br><span class="line">   <span class="built_in">RENDER_TARGET_BINDING_SLOTS</span>()  </span><br><span class="line"><span class="built_in">END_SHADER_PARAMETER_STRUCT</span>()  </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddVisualizeSpecialTagElementPass</span><span class="params">(FRDGBuilder&amp; GraphBuilder, <span class="type">const</span> FViewInfo&amp; View,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">const</span> FVisualizeLevelInstanceInputs&amp; Inputs)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">   <span class="built_in">check</span>(Inputs.SceneColor.<span class="built_in">IsValid</span>());  </span><br><span class="line">   <span class="built_in">check</span>(Inputs.SceneDepth.<span class="built_in">IsValid</span>());  </span><br><span class="line">  </span><br><span class="line">   <span class="built_in">RDG_EVENT_SCOPE</span>(GraphBuilder, <span class="string">&quot;Editor Visualize Special Tag Element&quot;</span>);  </span><br><span class="line">  </span><br><span class="line">   <span class="type">const</span> uint32 NumSamples = View.<span class="built_in">GetSceneTexturesConfig</span>().NumSamples;  </span><br><span class="line">  </span><br><span class="line">   <span class="comment">// Patch uniform buffers with updated state for rendering the outline mesh draw commands.  </span></span><br><span class="line">   <span class="type">const</span> FViewInfo* EditorView = <span class="built_in">CreateEditorPrimitiveView</span>(View, Inputs.SceneColor.ViewRect, NumSamples);  </span><br><span class="line">  </span><br><span class="line">   FRDGTextureRef DepthStencilTexture = <span class="literal">nullptr</span>;  </span><br><span class="line">  </span><br><span class="line">   <span class="comment">// Generate custom depth / stencil for outline shapes.  </span></span><br><span class="line">   &#123;  </span><br><span class="line">      &#123;         FRDGTextureDesc DepthStencilDesc = Inputs.SceneColor.Texture-&gt;Desc;  </span><br><span class="line">         DepthStencilDesc.<span class="built_in">Reset</span>();  </span><br><span class="line">         DepthStencilDesc.Format = PF_DepthStencil;  </span><br><span class="line">         <span class="comment">// This is a reversed Z depth surface, so 0.0f is the far plane.  </span></span><br><span class="line">         DepthStencilDesc.ClearValue = <span class="built_in">FClearValueBinding</span>((<span class="type">float</span>)ERHIZBuffer::FarPlane, <span class="number">0</span>);  </span><br><span class="line">         DepthStencilDesc.Flags = TexCreate_DepthStencilTargetable | TexCreate_ShaderResource;  </span><br><span class="line">         DepthStencilDesc.NumSamples = NumSamples;  </span><br><span class="line">  </span><br><span class="line">         DepthStencilTexture = GraphBuilder.<span class="built_in">CreateTexture</span>(DepthStencilDesc, <span class="built_in">TEXT</span>(<span class="string">&quot;LevelInstanceDepth&quot;</span>));  </span><br><span class="line">      &#125;  </span><br><span class="line">      FScene* Scene = View.Family-&gt;Scene-&gt;<span class="built_in">GetRenderScene</span>();  </span><br><span class="line">  </span><br><span class="line">      <span class="function"><span class="type">const</span> FScreenPassTextureViewport <span class="title">SceneColorViewport</span><span class="params">(Inputs.SceneColor)</span></span>;  </span><br><span class="line">  </span><br><span class="line">      <span class="keyword">auto</span>* PassParameters = GraphBuilder.<span class="built_in">AllocParameters</span>&lt;FVisualizeSpecialTagElementPassParameters&gt;();  </span><br><span class="line">      <span class="built_in">const_cast</span>&lt;FViewInfo&amp;&gt;(View).ParallelMeshDrawCommandPasses[EMeshPass::SpecialTagElement].<span class="built_in">BuildRenderingCommands</span>(GraphBuilder, Scene-&gt;GPUScene, PassParameters-&gt;InstanceCullingDrawParams);  </span><br><span class="line">  </span><br><span class="line">      PassParameters-&gt;SceneTextures = Inputs.SceneTextures;  </span><br><span class="line">      PassParameters-&gt;RenderTargets.DepthStencil = <span class="built_in">FDepthStencilBinding</span>(  </span><br><span class="line">         DepthStencilTexture,  </span><br><span class="line">         ERenderTargetLoadAction::EClear,  </span><br><span class="line">         ERenderTargetLoadAction::EClear,  </span><br><span class="line">         FExclusiveDepthStencil::DepthWrite_StencilWrite);  </span><br><span class="line">  </span><br><span class="line">      GraphBuilder.<span class="built_in">AddPass</span>(  </span><br><span class="line">         <span class="built_in">RDG_EVENT_NAME</span>(<span class="string">&quot;LevelInstanceDepth %dx%d&quot;</span>, SceneColorViewport.Rect.<span class="built_in">Width</span>(), SceneColorViewport.Rect.<span class="built_in">Height</span>()),  </span><br><span class="line">         PassParameters,         ERDGPassFlags::Raster,  </span><br><span class="line">         [&amp;View, SceneColorViewport, DepthStencilTexture, PassParameters](FRHICommandListImmediate&amp; RHICmdList)  </span><br><span class="line">      &#123;         RHICmdList.<span class="built_in">SetViewport</span>(SceneColorViewport.Rect.Min.X, SceneColorViewport.Rect.Min.Y, <span class="number">0.0f</span>, SceneColorViewport.Rect.Max.X, SceneColorViewport.Rect.Max.Y, <span class="number">1.0f</span>);  </span><br><span class="line">  </span><br><span class="line">         &#123;            <span class="built_in">SCOPED_DRAW_EVENT</span>(RHICmdList, EditorLevelInstance);  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">// Run LevelInstance pass on static elements  </span></span><br><span class="line">            View.ParallelMeshDrawCommandPasses[EMeshPass::SpecialTagElement].<span class="built_in">DispatchDraw</span>(<span class="literal">nullptr</span>, RHICmdList, &amp;PassParameters-&gt;InstanceCullingDrawParams);  </span><br><span class="line">         &#125;  </span><br><span class="line">      &#125;);   &#125;&#125;  </span><br><span class="line"><span class="comment">//Texwood0935 End Add, For Add A MeshPass</span></span><br></pre></td></tr></table></figure>
+<p>然后在后处理流程里调用我们的函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddPostProcessingPasses</span><span class="params">(  </span></span></span><br><span class="line"><span class="params"><span class="function">   FRDGBuilder&amp; GraphBuilder,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">const</span> FViewInfo&amp; View,   </span></span></span><br><span class="line"><span class="params"><span class="function">int32 ViewIndex,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">bool</span> bAnyLumenActive,  </span></span></span><br><span class="line"><span class="params"><span class="function">   EReflectionsMethod ReflectionsMethod,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">const</span> FPostProcessingInputs&amp; Inputs,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">const</span> Nanite::FRasterResults* NaniteRasterResults,  </span></span></span><br><span class="line"><span class="params"><span class="function">   FInstanceCullingManager&amp; InstanceCullingManager,  </span></span></span><br><span class="line"><span class="params"><span class="function">   FVirtualShadowMapArray* VirtualShadowMapArray,   </span></span></span><br><span class="line"><span class="params"><span class="function">FLumenSceneFrameTemporaries&amp; LumenFrameTemporaries,  </span></span></span><br><span class="line"><span class="params"><span class="function">   <span class="type">const</span> FSceneWithoutWaterTextures&amp; SceneWithoutWaterTextures,  </span></span></span><br><span class="line"><span class="params"><span class="function">   FScreenPassTexture TSRMoireInput)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">...</span><br><span class="line">&#123;  </span><br><span class="line">   FVisualizeLevelInstanceInputs PassInputs; </span><br><span class="line">   PassInputs.SceneColor = SceneColor;  </span><br><span class="line">   PassInputs.SceneDepth = SceneDepth;  </span><br><span class="line">   PassInputs.SceneTextures.SceneTextures = Inputs.SceneTextures;  </span><br><span class="line">   <span class="built_in">AddVisualizeSpecialTagElementPass</span>(GraphBuilder, View, PassInputs);  </span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时别忘了在计算可见性的地方让Mesh能够加入我们的MeshPass</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MarkRelevant</span><span class="params">()</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">&#123;  </span><br><span class="line">   DrawCommandPacket.<span class="built_in">AddCommandsForMesh</span>(PrimitiveIndex, PrimitiveSceneInfo, StaticMeshRelevance, StaticMesh, Scene, bCanCache, EMeshPass::SpecialTagElement);  </span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ComputeDynamicMeshRelevance</span><span class="params">(EShadingPath ShadingPath, <span class="type">bool</span> bAddLightmapDensityCommands, <span class="type">const</span> FPrimitiveViewRelevance&amp; ViewRelevance, <span class="type">const</span> FMeshBatchAndRelevance&amp; MeshBatch, FViewInfo&amp; View, FMeshPassMask&amp; PassMask, FPrimitiveSceneInfo* PrimitiveSceneInfo, <span class="type">const</span> FPrimitiveBounds&amp; Bounds)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (ViewRelevance.bDrawRelevance)  </span><br><span class="line">&#123;  </span><br><span class="line">   ...  </span><br><span class="line">   <span class="comment">//Texwood0935 Begin Add, For Add A MeshPass  </span></span><br><span class="line">   PassMask.<span class="built_in">Set</span>(EMeshPass::SpecialTagElement);  </span><br><span class="line">   View.NumVisibleDynamicMeshElements[EMeshPass::SpecialTagElement] += NumElements;  </span><br><span class="line">   <span class="comment">//Texwood0935 End Add, For Add A MeshPass  </span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译运行，看看我们的结果</p>
+<img data-src="/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%B7%BB%E5%8A%A0MeshPass_%E5%9B%BE%E7%89%871.png" class="" title="这个图的Stencil值是我们的目标值">
+
+<p>备注：调试的时候遇到一个很麻烦的bug，VS输出的SV_Position值有问题，是NAN导致结果出错。目前排查到的原因是LocalToWorld矩阵的值有问题，具体是哪步的值开始传出问题的还没继续排查。因此把Pass改成在BasePass的时候调用了(这个时候的值没问题)。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UnrealEngine%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> UnrealEngine学习</a>
+              <a href="/tags/%E6%B8%B2%E6%9F%93%E7%9B%B8%E5%85%B3/" rel="tag"><i class="fa fa-tag"></i> 渲染相关</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/06/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8EMemreport%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" rel="prev" title="虚幻引擎MemReport工具使用笔记">
+                  <i class="fa fa-chevron-left"></i> 虚幻引擎MemReport工具使用笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Texwood0935</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">7k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">22 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/texwood0935" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
