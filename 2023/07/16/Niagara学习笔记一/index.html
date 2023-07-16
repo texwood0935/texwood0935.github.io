@@ -20,28 +20,38 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"texwood0935.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","width":330,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="刚出新手村的1级普通村民, 欢迎各位大佬带带喵~ (&#x3D;ˆ･ω･ˆ&#x3D;)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="生活">
-<meta property="og:url" content="https://texwood0935.github.io/categories/%E7%94%9F%E6%B4%BB/index.html">
+    <meta name="description" content="本文是有关于如何使用Niagara来画一张RT的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Niagara学习笔记一：使用Niagara画一张RT">
+<meta property="og:url" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/index.html">
 <meta property="og:site_name" content="Texwood0935&#39;s Blog">
-<meta property="og:description" content="刚出新手村的1级普通村民, 欢迎各位大佬带带喵~ (&#x3D;ˆ･ω･ˆ&#x3D;)">
+<meta property="og:description" content="本文是有关于如何使用Niagara来画一张RT的学习笔记">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-07-03T17:13:56.000Z">
-<meta property="article:modified_time" content="2023-07-03T17:35:15.030Z">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%871.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%872.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%873.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%874.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%875.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%876.png">
+<meta property="og:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%877.png">
+<meta property="article:published_time" content="2023-07-16T13:37:05.000Z">
+<meta property="article:modified_time" content="2023-07-16T14:07:52.767Z">
 <meta property="article:author" content="Texwood0935">
+<meta property="article:tag" content="UnrealEngine学习">
+<meta property="article:tag" content="Niagara相关">
+<meta property="article:tag" content="渲染相关">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%871.png">
 
 
-<link rel="canonical" href="https://texwood0935.github.io/categories/%E7%94%9F%E6%B4%BB/">
+<link rel="canonical" href="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://texwood0935.github.io/categories/%E7%94%9F%E6%B4%BB/index.html","path":"categories/生活/index.html","title":"生活"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/","path":"2023/07/16/Niagara学习笔记一/","title":"Niagara学习笔记一：使用Niagara画一张RT"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>生活 | Texwood0935's Blog
-</title>
+<title>Niagara学习笔记一：使用Niagara画一张RT | Texwood0935's Blog</title>
   
 
 
@@ -128,7 +138,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -141,6 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%B2%92%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">1、创建一个粒子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AASimulation-Stage"><span class="nav-number">2.</span> <span class="nav-text">2、创建一个Simulation Stage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%94%BBRT%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">3、画RT的脚本</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -198,42 +209,142 @@
 
     </div>
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
 
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN"><header class="post-header">
+  
 
-<h1 class="post-title" itemprop="name headline">生活
-</h1>
 
-<div class="post-meta-container">
-  <ul class="breadcrumb">
-            <li><a href="/categories/">分类</a></li>
-          <li>生活</li>
-  </ul>
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://texwood0935.github.io/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/miki.jpg">
+      <meta itemprop="name" content="Texwood0935">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Texwood0935's Blog">
+      <meta itemprop="description" content="刚出新手村的1级普通村民, 欢迎各位大佬带带喵~ (=ˆ･ω･ˆ=)">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Niagara学习笔记一：使用Niagara画一张RT | Texwood0935's Blog">
+      <meta itemprop="description" content="本文是有关于如何使用Niagara来画一张RT的学习笔记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Niagara学习笔记一：使用Niagara画一张RT
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-07-16 21:37:05 / 修改时间：22:07:52" itemprop="dateCreated datePublished" datetime="2023-07-16T21:37:05+08:00">2023-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">技术学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E6%B8%B8%E6%88%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">游戏知识笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>519</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
 </div>
 
-</header>
+            <div class="post-description">本文是有关于如何使用Niagara来画一张RT的学习笔记</div>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body">
-          
-      </div>
-      
-      
-      
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>画RT的方法有很多，在不自己使用代码额外添加Shader的情况下，使用UE画RT大致有两种方法：DrawMaterial和使用粒子。<br>使用粒子画RT有几个好处：能精准控制所画RT的像素、可以画3D纹理、可以使用粒子的调试工具可能调试更方便等。<br>接下来，我们使用粒子来画一张RT：</p>
+<h3 id="1、创建一个粒子"><a href="#1、创建一个粒子" class="headerlink" title="1、创建一个粒子"></a>1、创建一个粒子</h3><p>我们首先创建一个几乎为空的粒子</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%871.png" class="" title="几乎为空的粒子">
+<p>然后再在Emitter的变量中创建RT相关的变量并且赋值</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%872.png" class="" title="创建变量">
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%873.png" class="" title="初始化变量">
+<p>这里有一点要注意，<strong>Render Target的DataInterface在勾选Inherit User Parameter Settings的时候，最好保证下面的Render Target User Parameter不为空，否则可能导致崩溃</strong>，如果运气不好还保存了这个粒子，那这个粒子可能一打开引擎就会崩溃ORZ(至少5.1.0的引擎会有这个问题).。</p>
+<h3 id="2、创建一个Simulation-Stage"><a href="#2、创建一个Simulation-Stage" class="headerlink" title="2、创建一个Simulation Stage"></a>2、创建一个Simulation Stage</h3><p>在粒子中画RT，我们是在Simulation Stage里实现的</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%874.png" class="" title="创建一个Simulation Stage">
+<p>这个Simulation Stage的设置我们要改一下，默认的Iteration Source是粒子类型，会导致你画RT对应的像素和粒子数量有关，实际上我们画RT很多时候可能并不想和粒子数量绑定</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%875.png" class="" title="更改一下设置">
+<p>在UE5.2里面，Iteration Source还多了一个Direct Set可以直接设置x,y,z的次数，更加方便了(也更像在写Computer Shader了×)</p>
+<h3 id="3、画RT的脚本"><a href="#3、画RT的脚本" class="headerlink" title="3、画RT的脚本"></a>3、画RT的脚本</h3><p>新建一个画RT的脚本RT里面都画上红色</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%876.png" class="" title="画RT的脚本">
+<p>我们把之前的Emitter变量赋值给脚本，运行粒子看回我们的RT，RT已经是红色了。</p>
+<img data-src="/2023/07/16/Niagara%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/Niagara%E7%AC%94%E8%AE%B0%E4%B8%80_%E5%9B%BE%E7%89%877.png" class="" title="RT已经由Niagara粒子绘制了">
     </div>
-  <ul class="breadcrumb">
-            <li><a href="/categories/">分类</a></li>
-          <li>生活</li>
-  </ul>
 
     
     
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UnrealEngine%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> UnrealEngine学习</a>
+              <a href="/tags/Niagara%E7%9B%B8%E5%85%B3/" rel="tag"><i class="fa fa-tag"></i> Niagara相关</a>
+              <a href="/tags/%E6%B8%B2%E6%9F%93%E7%9B%B8%E5%85%B3/" rel="tag"><i class="fa fa-tag"></i> 渲染相关</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/16/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AAMeshPass%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="虚幻引擎如何添加一个MeshPass">
+                  <i class="fa fa-chevron-left"></i> 虚幻引擎如何添加一个MeshPass
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
 </div>
